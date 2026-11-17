@@ -1,0 +1,17 @@
+Medição: 01-aplicacao-pooling
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        147
+Requisições/s:      1.85
+Tempo de resposta:  mediana 3084.3 ms | p95 40351.4 ms | p99 49188.2 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               41        1097.3 ms     2002.3 ms     2522.9 ms     0.0%    
+cliente-por-email     24        3141.6 ms     4369.5 ms     4862.8 ms     0.0%    
+pedidos-do-cliente    31        30598.7 ms    49187.1 ms    49245.3 ms    0.0%    
+pedidos-por-status    17        8394.4 ms     14833.8 ms    21046.7 ms    0.0%    
+busca-produtos        22        1895.3 ms     2990.5 ms     3144.1 ms     0.0%    
+vendas-por-dia        11        7016.4 ms     17814.5 ms    19329.7 ms    0.0%    
+top-produtos          1         41189.5 ms    41189.5 ms    41189.5 ms    0.0%    
