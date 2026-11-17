@@ -14,14 +14,8 @@ pool.on('error', (erro) => {
 });
 
 async function consultar(sql, parametros = []) {
-  const cliente = await pool.connect();
-
-  try {
-    const resultado = await cliente.query(sql, parametros);
-    return resultado.rows;
-  } finally {
-    cliente.release();
-  }
+  const resultado = await pool.query(sql, parametros);
+  return resultado.rows;
 }
 
 module.exports = { consultar };
