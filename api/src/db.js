@@ -7,7 +7,7 @@ const config = {
   database: process.env.DB_NAME || 'loja',
 };
 
-const pool = new Pool({ ...config, max: 20});
+const pool = new Pool(config);
 
 pool.on('error', (erro) => {
   console.error('Erro em conexão ociosa do PostgreSQL:', erro);
