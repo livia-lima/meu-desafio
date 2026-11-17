@@ -1,0 +1,11 @@
+# Experimentos
+
+Cada valor é a mediana de três rodadas. Para CPU e memória, a comparação usa as médias por contêiner registradas em `recursos.txt` de cada rodada.
+
+| Ideia | Fonte | Status | Antes | Depois | Pastas das medições | Conclusão |
+| --- | --- | --- | --- | --- | --- | --- |
+| **H1 — Reutilizar conexões com `pg.Pool`.** Usar um pool compartilhado com o limite padrão de 10 conexões em `consultar()`, mantendo o SQL e o número de chamadas. | [API de `pg.Pool`](https://node-postgres.com/apis/pool) e [caso de pooling da OpenAI](https://openai.com/index/scaling-postgresql/) | Aplicada, sem ganho | **Linha de base original (`3bd09a4`)**<br>p95 geral **39.355,8 ms**<br>p95 de `/clientes/:id/pedidos` 42.705,0 ms<br>p50 geral 3.378,9 ms<br>Vazão 1,73 req/s<br>CPU média da API 6,5% e do banco 101,0%<br>Memória média da API 36,0 MiB e do banco 226,1 MiB | **Pooling (`9a10a1c`)**<br>p95 geral **40.351,4 ms**<br>p95 de `/clientes/:id/pedidos` 48.664,3 ms<br>p50 geral 3.084,3 ms<br>Vazão 1,90 req/s<br>CPU média da API 6,1% e do banco 100,1%<br>Memória média da API 73,8 MiB e do banco 214,8 MiB | **Antes** [rodada 1](resultados/20261106-171845-00-linha-de-base/), [rodada 2](resultados/20261106-172102-00-linha-de-base/) e [rodada 3](resultados/20261106-172256-00-linha-de-base/).<br>**Depois** [rodada 1](resultados/20261116-132408-01-aplicacao-pooling/), [rodada 2](resultados/20261116-132612-01-aplicacao-pooling/) e [rodada 3](resultados/20261116-132810-01-aplicacao-pooling/). | O contrato foi mantido nas três rodadas. A mediana do p95 geral subiu, e as faixas de p95 entre as rodadas se sobrepuseram. As medianas observadas de p50 e vazão melhoraram, enquanto o consumo de memória da API aumentou. A previsão de reduzir o p95 ficou sem confirmação para o limite testado. |
+
+Nas [medições isoladas da rota de pedidos](<diagnostico/h1-medicao-rota-pedidos - Página1.csv>), a espera por `query()` ocupou a maior parte do tempo. O pooling preservou o SQL e o número de consultas. A espera por uma vaga no pool ficou sem medição, e a causa do p95 observado permanece em aberto.
+
+As seis rodadas usaram 20 VUs, 60 s de carga, 15 s de aquecimento e semente 42. Nos resumos oficiais, a CPU máxima do banco aparece abaixo da média. A tabela registra a média conforme consta nos arquivos de saída.
