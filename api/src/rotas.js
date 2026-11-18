@@ -72,10 +72,12 @@ rotas.get('/clientes/:id/pedidos', assincrono(async (req, res) => {
             p.criado_em,
             i.id AS item_id,
             i.produto_id,
+            pr.nome AS produto_nome,
             i.quantidade,
             i.preco_unitario_centavos
        FROM pedidos p
        LEFT JOIN itens_pedido i ON i.pedido_id = p.id
+       LEFT JOIN produtos pr ON pr.id = i.produto_id
       WHERE p.cliente_id = $1
       ORDER BY p.criado_em DESC, p.id DESC, i.id ASC`,
     [id],
@@ -99,14 +101,9 @@ rotas.get('/clientes/:id/pedidos', assincrono(async (req, res) => {
 
     if (linha.item_id === null) continue;
 
-    const [produto] = await consultar(
-      'SELECT * FROM produtos WHERE id = $1',
-      [linha.produto_id],
-    );
-
     pedido.itens.push({
       produto_id: linha.produto_id,
-      produto_nome: produto.nome,
+      produto_nome: linha.produto_nome,
       quantidade: linha.quantidade,
       preco_unitario_centavos: linha.preco_unitario_centavos,
     });
