@@ -1,0 +1,17 @@
+Medição: 04-join-pedidos-itens
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        168
+Requisições/s:      2.69
+Tempo de resposta:  mediana 3499.0 ms | p95 23794.0 ms | p99 30079.0 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               45        992.7 ms      2881.0 ms     3847.0 ms     0.0%    
+cliente-por-email     29        3350.9 ms     4824.5 ms     5343.1 ms     0.0%    
+pedidos-do-cliente    36        18652.7 ms    30011.2 ms    31550.9 ms    0.0%    
+pedidos-por-status    20        9093.6 ms     15074.8 ms    20849.6 ms    0.0%    
+busca-produtos        25        1795.7 ms     3259.2 ms     3982.2 ms     0.0%    
+vendas-por-dia        12        9889.8 ms     17530.8 ms    17807.7 ms    0.0%    
+top-produtos          1         19008.2 ms    19008.2 ms    19008.2 ms    0.0%    
