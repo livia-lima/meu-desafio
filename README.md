@@ -4,6 +4,71 @@ Aplicação do desafio técnico da vaga de estágio em Pesquisa e Inovação da 
 
 A aplicação é a API de uma loja fictícia, em Node.js (Express) com PostgreSQL 16, rodando em containers. Ela funciona, mas fica lenta sob carga e gasta mais recursos do que deveria. Todos os dados são sintéticos e gerados na primeira subida: 100 mil clientes, 20 mil produtos, 500 mil pedidos e 1,5 milhão de itens de pedido.
 
+## Problema investigado
+
+A API apresentava latência elevada sob carga. A análise inicial identificou dois possíveis problemas: cada consulta estabelecia e encerrava uma conexão com o PostgreSQL, e a rota de pedidos por cliente executava consultas sequenciais dentro de laços.
+
+Foram investigadas a reutilização de conexões com `pg.Pool` e a substituição das consultas repetidas por JOINs. Cada mudança foi aplicada e medida separadamente, preservando o contrato das respostas.
+
+A versão final mantém um pool de dez conexões, com aquisição e liberação explícitas, e reúne pedidos, itens e produtos em uma consulta. O aumento do pool para vinte conexões e o uso de `pool.query()` foram testados e descartados diante dos resultados observados.
+
+## Resumo dos resultados
+
+A comparação utiliza a linha de base controlada e a versão final. Cada configuração foi medida três vezes, com 20 usuários virtuais, duração de 60 segundos, aquecimento de 15 segundos e semente 42.
+
+Os valores abaixo são medianas das três execuções. Para CPU e memória, foi calculada a mediana das médias por contêiner registradas em cada rodada.
+
+| Métrica | Linha de base controlada | Versão final |
+|---|---:|---:|
+| Latência geral — mediana | 3.403,2 ms | 5.300,0 ms |
+| Latência geral — p95 | 43.626,3 ms | 17.214,4 ms |
+| Vazão | 1,55 req/s | 2,61 req/s |
+| Taxa geral de erros | 0,84% | 0,00% |
+| Pedidos por cliente — p95 | 49.791,3 ms | 18.061,1 ms |
+| Cliente por ID — p95 | 524,7 ms | 4.787,1 ms |
+| CPU média da API | 6,3% | 6,5% |
+| CPU média do banco | 99,7% | 99,8% |
+| Memória média da API | 37,8 MiB | 29,7 MiB |
+| Memória média do banco | 218,5 MiB | 231,5 MiB |
+
+O p95 geral e o p95 da rota de pedidos por cliente diminuíram, e a vazão aumentou. Entretanto, a mediana geral e a latência da busca por ID pioraram. O banco continuou utilizando aproximadamente uma CPU inteira, sem redução demonstrada desse consumo.
+
+A investigação da busca por ID identificou espera por conexões do pool compartilhado enquanto outras consultas permaneciam em execução. A redução do custo dessas consultas ficou como trabalho futuro.
+
+As verificações após as medições confirmaram a manutenção das 42 respostas do contrato.
+
+### Evidências
+
+- Linha de base controlada: [rodada 1](resultados/20261117-102533-00-linha-de-base-controlada/), [rodada 2](resultados/20261117-102957-00-linha-de-base-controlada/) e [rodada 3](resultados/20261117-103554-00-linha-de-base-controlada/).
+- Versão final: [rodada 1](resultados/20261118-140651-05-join-produtos/), [rodada 2](resultados/20261118-140838-05-join-produtos/) e [rodada 3](resultados/20261118-141036-05-join-produtos/).
+- [Registro dos experimentos](experimentos.md), incluindo mudanças sem ganho e regressões.
+- [Scripts e evidências de diagnóstico](diagnostico/).
+- [Artigo](artigo/artigo.md), com fundamentação, alternativas e limites.
+
+## Reproduzir a versão final
+
+Os requisitos e as instruções detalhadas de instalação e medição permanecem nas seções seguintes. Com Docker disponível, execute na raiz do projeto:
+
+```bash
+docker compose up -d --build
+curl http://127.0.0.1:3000/saude
+scripts/verificar-contrato.sh comparar
+```
+
+O contrato original já está versionado. Para verificar a versão final, utilize `comparar`, preservando o arquivo de referência.
+
+Depois de obter “Contrato mantido”, realize três medições:
+
+```bash
+env VUS=20 DURACAO=60s AQUECIMENTO=15s SEMENTE=42 scripts/medir.sh reproducao-final
+env VUS=20 DURACAO=60s AQUECIMENTO=15s SEMENTE=42 scripts/medir.sh reproducao-final
+env VUS=20 DURACAO=60s AQUECIMENTO=15s SEMENTE=42 scripts/medir.sh reproducao-final
+```
+
+Antes de medir, mantenha as alterações commitadas para que o contexto registre zero arquivos alterados sem commit. Execute as rodadas na mesma máquina, com programas pesados fechados, preservando os limites dos contêineres e os parâmetros de carga.
+
+Cada execução cria uma pasta em `resultados/`, com os parâmetros, o commit e as saídas da medição. Compare a mediana das três rodadas. Resultados históricos obtidos em outra máquina não substituem uma referência medida nas mesmas condições.
+
 ## Prazo e entrega
 
 - **Prazo e entregas:** estão no enunciado enviado na largada
