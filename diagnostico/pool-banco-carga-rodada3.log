@@ -1,0 +1,19 @@
+ Container desafio-performance-carga-run-d3e71d68e9a4 Creating 
+ Container desafio-performance-carga-run-d3e71d68e9a4 Created 
+Medição: diagnostico-pool-banco-rodada1
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        195
+Requisições/s:      2.83
+Tempo de resposta:  mediana 4350.1 ms | p95 15236.4 ms | p99 19188.3 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               50        2495.3 ms     4442.3 ms     6736.7 ms     0.0%    
+cliente-por-email     33        4120.8 ms     6863.4 ms     8081.0 ms     0.0%    
+pedidos-do-cliente    38        10491.6 ms    14496.7 ms    15187.6 ms    0.0%    
+pedidos-por-status    23        11291.9 ms    17221.7 ms    18428.1 ms    0.0%    
+busca-produtos        34        2931.0 ms     5158.9 ms     6533.1 ms     0.0%    
+vendas-por-dia        15        8321.5 ms     17376.1 ms    17424.4 ms    0.0%    
+top-produtos          2         33234.6 ms    39239.7 ms    39773.5 ms    0.0%    

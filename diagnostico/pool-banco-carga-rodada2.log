@@ -1,0 +1,19 @@
+ Container desafio-performance-carga-run-e17ea69d23bb Creating 
+ Container desafio-performance-carga-run-e17ea69d23bb Created 
+Medição: diagnostico-pool-banco-rodada1
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        191
+Requisições/s:      2.79
+Tempo de resposta:  mediana 4901.4 ms | p95 16805.1 ms | p99 20597.7 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               49        2397.5 ms     4395.3 ms     4655.7 ms     0.0%    
+cliente-por-email     32        4499.6 ms     6269.5 ms     6391.2 ms     0.0%    
+pedidos-do-cliente    39        10372.9 ms    18855.3 ms    20695.7 ms    0.0%    
+pedidos-por-status    24        11003.5 ms    15585.3 ms    22153.3 ms    0.0%    
+busca-produtos        31        3194.8 ms     5205.8 ms     5865.3 ms     0.0%    
+vendas-por-dia        14        11130.0 ms    18653.3 ms    20172.6 ms    0.0%    
+top-produtos          2         20169.6 ms    20196.0 ms    20198.3 ms    0.0%    

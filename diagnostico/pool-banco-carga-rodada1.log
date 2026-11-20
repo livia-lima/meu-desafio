@@ -1,0 +1,19 @@
+ Container desafio-performance-carga-run-7f1cf36d516d Creating 
+ Container desafio-performance-carga-run-7f1cf36d516d Created 
+Medição: diagnostico-pool-banco-rodada1
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        181
+Requisições/s:      2.66
+Tempo de resposta:  mediana 5006.3 ms | p95 16039.0 ms | p99 18594.5 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               48        2992.5 ms     4476.4 ms     4812.0 ms     0.0%    
+cliente-por-email     31        4604.4 ms     6142.2 ms     6326.8 ms     0.0%    
+pedidos-do-cliente    37        11496.2 ms    17282.1 ms    18063.3 ms    0.0%    
+pedidos-por-status    23        11897.3 ms    16731.4 ms    17306.7 ms    0.0%    
+busca-produtos        28        3392.3 ms     5178.6 ms     5467.6 ms     0.0%    
+vendas-por-dia        12        8570.6 ms     18561.9 ms    19270.6 ms    0.0%    
+top-produtos          2         29419.6 ms    41462.1 ms    42532.6 ms    0.0%    
