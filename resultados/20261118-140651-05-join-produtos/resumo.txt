@@ -1,0 +1,17 @@
+Medição: 05-join-produtos
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        178
+Requisições/s:      2.62
+Tempo de resposta:  mediana 5001.8 ms | p95 16552.8 ms | p99 20353.7 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               44        2726.8 ms     4689.4 ms     5457.0 ms     0.0%    
+cliente-por-email     30        4597.8 ms     6607.0 ms     7960.8 ms     0.0%    
+pedidos-do-cliente    37        12299.5 ms    17258.6 ms    18588.0 ms    0.0%    
+pedidos-por-status    23        11957.5 ms    15489.1 ms    19705.3 ms    0.0%    
+busca-produtos        31        3402.6 ms     5207.1 ms     5656.0 ms     0.0%    
+vendas-por-dia        11        10466.7 ms    18311.9 ms    18514.3 ms    0.0%    
+top-produtos          2         33796.9 ms    46032.3 ms    47119.9 ms    0.0%    
