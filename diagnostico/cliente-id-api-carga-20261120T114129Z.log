@@ -1,0 +1,19 @@
+ Container desafio-performance-carga-run-1715cbd3d582 Creating 
+ Container desafio-performance-carga-run-1715cbd3d582 Created 
+Medição: diagnostico-cliente-id-api
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        180
+Requisições/s:      2.73
+Tempo de resposta:  mediana 5020.1 ms | p95 17914.2 ms | p99 24250.2 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               44        2492.6 ms     4692.7 ms     5640.0 ms     0.0%    
+cliente-por-email     31        4507.3 ms     6627.7 ms     9259.9 ms     0.0%    
+pedidos-do-cliente    36        11494.3 ms    18686.0 ms    22083.9 ms    0.0%    
+pedidos-por-status    24        10851.8 ms    26172.6 ms    29718.3 ms    0.0%    
+busca-produtos        30        3352.9 ms     5998.4 ms     8461.1 ms     0.0%    
+vendas-por-dia        13        10046.9 ms    16868.7 ms    19167.9 ms    0.0%    
+top-produtos          2         18946.7 ms    19210.6 ms    19234.1 ms    0.0%    

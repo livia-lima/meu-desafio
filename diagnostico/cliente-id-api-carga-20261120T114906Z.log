@@ -1,0 +1,19 @@
+ Container desafio-performance-carga-run-411fa2670675 Creating 
+ Container desafio-performance-carga-run-411fa2670675 Created 
+Medição: diagnostico-cliente-id-api
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        168
+Requisições/s:      2.48
+Tempo de resposta:  mediana 5984.6 ms | p95 19439.4 ms | p99 20936.5 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               40        2899.4 ms     6260.6 ms     6298.9 ms     0.0%    
+cliente-por-email     28        5002.4 ms     6697.8 ms     8119.9 ms     0.0%    
+pedidos-do-cliente    34        12199.6 ms    19804.6 ms    20576.5 ms    0.0%    
+pedidos-por-status    22        12847.9 ms    17622.6 ms    19201.4 ms    0.0%    
+busca-produtos        30        4049.7 ms     6956.9 ms     7987.4 ms     0.0%    
+vendas-por-dia        12        16098.4 ms    20979.6 ms    21192.8 ms    0.0%    
+top-produtos          2         20898.0 ms    21076.9 ms    21092.8 ms    0.0%    

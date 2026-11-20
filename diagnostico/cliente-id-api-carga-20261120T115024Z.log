@@ -1,0 +1,19 @@
+ Container desafio-performance-carga-run-5de10c707c05 Creating 
+ Container desafio-performance-carga-run-5de10c707c05 Created 
+Medição: diagnostico-cliente-id-api
+Carga: 20 usuários virtuais por 60s
+
+Requisições:        167
+Requisições/s:      2.49
+Tempo de resposta:  mediana 6014.3 ms | p95 18221.0 ms | p99 24772.3 ms
+Erros:              0.00%
+
+Por rota:
+rota                  req       mediana       p95           p99           erros   
+cliente               42        2394.5 ms     7202.7 ms     7782.7 ms     0.0%    
+cliente-por-email     26        5500.4 ms     6659.3 ms     6939.5 ms     0.0%    
+pedidos-do-cliente    35        10492.2 ms    17835.5 ms    19588.4 ms    0.0%    
+pedidos-por-status    20        14057.6 ms    30992.3 ms    32273.8 ms    0.0%    
+busca-produtos        29        3604.7 ms     7025.2 ms     7312.9 ms     0.0%    
+vendas-por-dia        13        10652.4 ms    18781.8 ms    20429.1 ms    0.0%    
+top-produtos          2         20173.0 ms    21467.6 ms    21582.7 ms    0.0%    
