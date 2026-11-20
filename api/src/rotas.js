@@ -1,6 +1,5 @@
 const express = require('express');
 const { consultar } = require('./db');
-const { performance: cronometro } = require('node:perf_hooks');
 
 const rotas = express.Router();
 
@@ -53,34 +52,11 @@ rotas.get('/clientes', assincrono(async (req, res) => {
 
 rotas.get('/clientes/:id', assincrono(async (req, res) => {
   const id = inteiroPositivo(req.params.id);
-  if (id === null) {
-    return res.status(400).json({ erro: 'id invalido' });
-  }
+  if (id === null) return res.status(400).json({ erro: 'id invalido' });
 
-  const tempos = {};
-  const inicio = cronometro.now();
-
-  const linhas = await consultar(
-    'SELECT * FROM clientes WHERE id = $1',
-    [id],
-    tempos,
-  );
-
-  if (linhas.length === 0) {
-    return res.status(404).json({ erro: 'cliente nao encontrado' });
-  }
-
+  const linhas = await consultar('SELECT * FROM clientes WHERE id = $1', [id]);
+  if (linhas.length === 0) return res.status(404).json({ erro: 'cliente nao encontrado' });
   res.json(formatarCliente(linhas[0]));
-
-  const fim = cronometro.now();
-
-  console.log(JSON.stringify({
-    tipo: 'diagnostico_cliente_id',
-    instante: new Date().toISOString(),
-    cliente_id: id,
-    ...tempos,
-    rota_ms: fim - inicio,
-  }));
 }));
 
 rotas.get('/clientes/:id/pedidos', assincrono(async (req, res) => {
