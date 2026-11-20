@@ -6,6 +6,7 @@ const config = {
   port: Number(process.env.DB_PORT || 5432),
   user: process.env.DB_USER || 'loja',
   database: process.env.DB_NAME || 'loja',
+  application_name: 'api-diagnostico-cliente-id',
 };
 
 const pool = new Pool(config);
@@ -13,6 +14,18 @@ const pool = new Pool(config);
 pool.on('error', (erro) => {
   console.error('Erro em conexão ociosa do PostgreSQL:', erro);
 });
+
+const observadorPool = setInterval(() => {
+  console.log(JSON.stringify({
+    tipo: 'diagnostico_pool',
+    instante: new Date().toISOString(),
+    total: pool.totalCount,
+    disponiveis: pool.idleCount,
+    esperando: pool.waitingCount,
+  }));
+}, 1000);
+
+observadorPool.unref();
 
 async function consultar(sql, parametros = [], tempos = null) {
   const t0 = cronometro.now();
